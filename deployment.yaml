@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: trueno-backend-database-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       component: trueno-backend-database-deployment
@@ -30,11 +30,11 @@ spec:
             - name: MONGO_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongousername
+                  name: trueno-backend-database-secret
                   key:  MONGO_USERNAME
             - name: MONGO_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mongopassword
+                  name: trueno-backend-database-secret
                   key: MONGO_PASSWORD
           
