@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trueno-backend-database-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: trueno-backend-database-deployment
+  template:
+    metadata:
+      labels:
+        component: trueno-backend-database-deployment
+    spec:
+      volumes:
+        - name: trueno-backend-storage
+          persistentVolumeClaim: 
+            claimName: trueno-backend-database-pvc
+      containers: 
+        - name: trueno-backend-database-deployment
+          image: mongo:4.2.6
+          ports: 
+            - containerPort: 27017
+              protocol: TCP
+          volumeMounts: 
+            - name: trueno-backend-storage
+              mountPath: /data/db
+              subPath: trueno-backend-storage
+          env:
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongousername
+                  key:  MONGO_USERNAME
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongopassword
+                  key: MONGO_PASSWORD
+          
